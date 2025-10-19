@@ -1,0 +1,19 @@
+# حماية أساسية
+Options -Indexes
+
+# إعادة كتابة للروابط النظيفة
+RewriteEngine On
+
+# sitemap.xml -> sitemap.php
+RewriteRule ^sitemap.xml$ sitemap.php [L]
+
+# /track/ABC123 -> track.php?num=ABC123
+RewriteRule ^track/([A-Za-z0-9-_]+)/?$ track.php?num=$1 [QSA,L]
+
+# /my -> my.php
+RewriteRule ^my/?$ my.php [QSA,L]
+
+# منع الوصول المباشر لبعض الامتدادات الحساسة
+<FilesMatch ".(ini|log|sh|sql|bak)$">
+  Deny from all
+</FilesMatch>
