@@ -1,19 +1,41 @@
-# حماية أساسية
+# منع عرض الفهارس
 Options -Indexes
 
-# إعادة كتابة للروابط النظيفة
+# تفعيل محرك إعادة الكتابة
 RewriteEngine On
 
+# إعادة توجيه HTTPS (اختياري)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
 # sitemap.xml -> sitemap.php
-RewriteRule ^sitemap.xml$ sitemap.php [L]
+RewriteRule ^sitemap\.xml$ sitemap.php [L]
 
 # /track/ABC123 -> track.php?num=ABC123
-RewriteRule ^track/([A-Za-z0-9-_]+)/?$ track.php?num=$1 [QSA,L]
+RewriteRule ^track/([A-Za-z0-9\-\_]+)/?$ track.php?num=$1 [QSA,L]
 
 # /my -> my.php
 RewriteRule ^my/?$ my.php [QSA,L]
 
-# منع الوصول المباشر لبعض الامتدادات الحساسة
-<FilesMatch ".(ini|log|sh|sql|bak)$">
-  Deny from all
+# منع الوصول المباشر للملفات الحساسة
+<FilesMatch "\.(ini|log|sh|sql|bak|conf|env)$">
+  Require all denied
 </FilesMatch>
+
+# حماية من hotlinking للأصول
+RewriteCond %{HTTP_REFERER} !^$
+RewriteCond %{HTTP_REFERER} !^https?://(www\.)?yourdomain\.com [NC]
+RewriteRule \.(jpg|jpeg|png|gif|svg|css|js)$ - [F,L]
+
+# تفعيل الضغط
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json
+</IfModule>
+
+# التخزين المؤقت للمتصفح
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+</IfModule>
