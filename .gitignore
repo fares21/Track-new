@@ -1,0 +1,24 @@
+# تجاهل بيانات حساسة وملفات النظام
+config/config.php
+config/*.env
+storage/cache/*
+storage/ratelimit/*
+storage/logs/*
+!storage/cache/.gitkeep
+!storage/ratelimit/.gitkeep
+!storage/logs/.gitkeep
+
+# نظام التشغيل
+.DS_Store
+Thumbs.db
+
+# مخرجات تحرير نصوص/IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# باكاب وقاعدة بيانات محلية
+*.bak
+*.sql
+!schema.sql
